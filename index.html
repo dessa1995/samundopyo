@@ -59,7 +59,8 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fade-in-up 0.3s ease-out; }
         
-        .venn-circle { transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; mix-blend-mode: multiply; }
+        /* 벤다이어그램 위치 이동 애니메이션을 위해 transform에서 all로 변경 */
+        .venn-circle { transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); mix-blend-mode: multiply; }
 
         .math-fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 4px; }
         .math-fraction .num { border-bottom: 2px solid currentColor; padding: 0 4px; line-height: 1.2; }
@@ -824,53 +825,149 @@
             const [valCA, setValCA] = useState(8); 
             const [valABC, setValABC] = useState(2); 
 
-            // 단순 선형 스케일이 아닌 면적(Math.sqrt)에 비례하는 현실적 스케일링
-            // 값이 0일 때 화면에서 완전히 보이지 않도록 방지하는 최소값(0.2) 적용
-            const getScale = (val) => {
-                if (val <= 0) return 0;
-                return Math.max(0.2, Math.sqrt(val / 100) * 1.3);
+            // 교집합 한계 방어 (상식선)
+            useEffect(() => {
+                if (valAB > Math.min(valA, valB)) setValAB(Math.min(valA, valB));
+                if (valBC > Math.min(valB, valC)) setValBC(Math.min(valB, valC));
+                if (valCA > Math.min(valC, valA)) setValCA(Math.min(valC, valA));
+                if (valABC > Math.min(valAB, valBC, valCA)) setValABC(Math.min(valAB, valBC, valCA));
+            }, [valA, valB, valC, valAB, valBC, valCA, valABC]);
+
+            // 면적 비례 반지름 계산: r = k * sqrt(Area)
+            const getR = v => v <= 0 ? 0 : Math.max(25, Math.sqrt(v / 100) * 110);
+            const rA = getR(valA);
+            const rB = getR(valB);
+            const rC = getR(valC);
+
+            // 중심 간 거리 계산: 교집합 크기에 비례하여 원이 가까워짐
+            const getDist = (r1, r2, v1, v2, vOver) => {
+                if (r1 === 0 || r2 === 0) return 0; 
+                if (vOver === 0) return r1 + r2 + 10; // 교집합 0일 때 확실히 떨어뜨림
+                
+                const minV = Math.min(v1, v2);
+                if (minV === 0) return r1 + r2 + 10;
+
+                const overlapRatio = Math.min(0.95, vOver / minV); // 0 ~ 0.95
+                const minR = Math.min(r1, r2);
+                const maxDist = r1 + r2;
+                const minDist = Math.abs(r1 - r2);
+                
+                // 완벽한 선형 보간 대신 거리를 점진적으로 가깝게 당김
+                return Math.max(minDist + 5, maxDist - (overlapRatio * (maxDist - minDist) * 0.9)); 
             };
 
-            const scaleA = getScale(valA);
-            const scaleB = getScale(valB);
-            const scaleC = getScale(valC);
+            let dAB = getDist(rA, rB, valA, valB, valAB);
+            let dBC = getDist(rB, rC, valB, valC, valBC);
+            let dCA = getDist(rC, rA, valC, valA, valCA);
 
+            // 삼각 부등식 보정 (세 원이 정상적으로 겹치거나 맞물리기 위한 필수 로직)
+            // 가장 긴 변이 나머지 두 변의 합보다 크면, 시각적 깨짐을 방지하기 위해 짧은 변을 약간 늘림
+            let sides = [
+                {name: 'AB', val: dAB},
+                {name: 'BC', val: dBC},
+                {name: 'CA', val: dCA}
+            ].sort((a,b) => b.val - a.val);
+
+            if (sides[0].val > sides[1].val + sides[2].val) {
+                const needed = sides[0].val * 1.01 + 2; 
+                const sum = sides[1].val + sides[2].val;
+                const ratio = sum === 0 ? 1 : needed / sum;
+                if (sides[1].name === 'AB') dAB *= ratio;
+                if (sides[2].name === 'AB') dAB *= ratio;
+                if (sides[1].name === 'BC') dBC *= ratio;
+                if (sides[2].name === 'BC') dBC *= ratio;
+                if (sides[1].name === 'CA') dCA *= ratio;
+                if (sides[2].name === 'CA') dCA *= ratio;
+            }
+
+            // A(좌상), B(우상), C(하단) 좌표 설정 (코사인 제2법칙 사용)
+            const xA = -dAB / 2;
+            const yA = 0;
+            const xB = dAB / 2;
+            const yB = 0;
+            let xC = 0, yC = 0;
+
+            if (valC > 0 && valA > 0 && valB > 0) {
+                // A 각도를 기준으로 C의 위치 도출 (코사인 법칙)
+                const cosA = (dCA * dCA + dAB * dAB - dBC * dBC) / (2 * dCA * dAB);
+                xC = xA + dCA * cosA;
+                const sinA = Math.sqrt(Math.max(0, 1 - cosA * cosA));
+                yC = yA + dCA * sinA; // SVG는 Y축이 아래로 증가
+            } else if (valC > 0) {
+                if (valA > 0) { xC = xA; yC = yA + dCA; }
+                else if (valB > 0) { xC = xB; yC = yB + dBC; }
+            }
+
+            // 다이어그램 중앙 정렬 (무게중심 계산)
+            let activeCount = (valA>0?1:0) + (valB>0?1:0) + (valC>0?1:0);
+            let cx = 0, cy = 0;
+            if (activeCount > 0) {
+                cx = ((valA>0?xA:0) + (valB>0?xB:0) + (valC>0?xC:0)) / activeCount;
+                cy = ((valA>0?yA:0) + (valB>0?yB:0) + (valC>0?yC:0)) / activeCount;
+            }
+
+            // 안정적인 시각적 위치로 중심점 일괄 이동
+            const fxA = xA - cx, fyA = yA - cy;
+            const fxB = xB - cx, fyB = yB - cy;
+            const fxC = xC - cx, fyC = yC - cy;
+
+            // 순수 영역 및 교집합 값
             const onlyAB = Math.max(0, valAB - valABC);
             const onlyBC = Math.max(0, valBC - valABC);
             const onlyCA = Math.max(0, valCA - valABC);
-
             const onlyA = Math.max(0, valA - valAB - valCA + valABC);
             const onlyB = Math.max(0, valB - valAB - valBC + valABC);
             const onlyC = Math.max(0, valC - valBC - valCA + valABC);
-
             const unionAll = onlyA + onlyB + onlyC + onlyAB + onlyBC + onlyCA + valABC;
             const blindSpot = Math.max(0, 100 - unionAll);
-
             const onlyOneSum = onlyA + onlyB + onlyC;
             const twoOrMoreSum = onlyAB + onlyBC + onlyCA + valABC;
+
+            // 외곽 라벨 위치 계산용 헬퍼 함수
+            const getOutwardPos = (x, y, r, factor = 0.5) => {
+                const len = Math.sqrt(x*x + y*y) || 1;
+                return { x: x + (x/len)*(r*factor), y: y + (y/len)*(r*factor) };
+            };
+            
+            const pA = getOutwardPos(fxA, fyA, rA, 0.45);
+            const pB = getOutwardPos(fxB, fyB, rB, 0.45);
+            const pC = getOutwardPos(fxC, fyC, rC, 0.45);
+
+            const pAB = { x: (fxA + fxB)/2, y: (fyA + fyB)/2 };
+            const pBC = { x: (fxB + fxC)/2, y: (fyB + fyC)/2 };
+            const pCA = { x: (fxC + fxA)/2, y: (fyC + fyA)/2 };
+            const pABC = activeCount === 3 ? { x: (fxA + fxB + fxC)/3, y: (fyA + fyB + fyC)/3 } : { x: 0, y: 0 };
+
+            // SVG 위에 텍스트를 아름답게 띄우기 위한 커스텀 컨테이너
+            const FObj = ({ x, y, children }) => (
+                <foreignObject x={x - 40} y={y - 20} width="80" height="40" className="overflow-visible pointer-events-none">
+                    <div className="flex items-center justify-center w-full h-full drop-shadow-md">
+                        {children}
+                    </div>
+                </foreignObject>
+            );
 
             return (
                 <div className="animate-fade-in pb-10 space-y-6">
                     <div className="bg-white rounded-3xl p-4 md:p-8 shadow-sm border border-slate-200">
-                        <h2 className="text-xl md:text-2xl font-black mb-2 text-slate-800 flex items-center gap-2">
-                            <span className="text-indigo-500">⭕</span> 복지 벤다이어그램 해석기
-                        </h2>
+                        <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+                            <h2 className="text-xl md:text-2xl font-black text-slate-800 flex items-center gap-2">
+                                <span className="text-indigo-500">⭕</span> 복지 벤다이어그램 해석기
+                            </h2>
+                            <span className="bg-blue-600 text-white text-[10px] md:text-xs font-black px-3 py-1 rounded-full animate-pulse-soft whitespace-nowrap self-start md:self-auto">면적 비례 & SVG 수리 모델 적용</span>
+                        </div>
                         <p className="text-slate-500 text-xs md:text-sm font-medium mb-6">
-                            입력값에 따라 벤다이어그램 원의 <b className="text-indigo-600">면적이 수학적(루트 연산)으로 현실감 있게 연동</b>됩니다. 시각적 크기 변화를 관찰하세요.
+                            입력값에 따라 벤다이어그램 원의 <b className="text-indigo-600">면적(루트 연산)과 중심 간의 거리가 코사인 제2법칙에 의해 연동</b>되며, 중복이 0이면 서로 완벽하게 떨어집니다.
                         </p>
 
                         <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
                             {/* 왼쪽: 슬라이더 조작 패널 */}
                             <div className="w-full lg:w-[55%] space-y-6 bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200 shadow-inner">
-                                
-                                {/* 전체 수급률 */}
                                 <div>
                                     <h3 className="font-bold text-slate-700 text-sm mb-3 border-b pb-2 flex items-center gap-2"><span className="text-lg">📊</span> 각 제도별 수급률 (%)</h3>
                                     <div className="space-y-4">
                                         <div className="flex flex-col gap-1.5">
-                                            <label className="text-[11px] font-bold text-blue-600 flex justify-between">
-                                                A (사회보험) 
-                                            </label>
+                                            <label className="text-[11px] font-bold text-blue-600 flex justify-between">A (사회보험)</label>
                                             <div className="flex items-center gap-3">
                                                 <input type="range" min="0" max="100" value={valA} onChange={(e)=>setValA(Number(e.target.value))} className="flex-1 text-blue-500" />
                                                 <input type="number" min="0" max="100" value={valA} onChange={(e)=>setValA(Number(e.target.value))} className="w-14 md:w-16 p-1 border rounded-lg text-center font-bold text-blue-900 bg-white text-sm" />
@@ -893,7 +990,6 @@
                                     </div>
                                 </div>
 
-                                {/* 중복 수급률 */}
                                 <div>
                                     <h3 className="font-bold text-slate-700 text-sm mb-3 border-b pb-2 flex items-center gap-2"><span className="text-lg">🔗</span> 중복 수급률 (%)</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
@@ -929,40 +1025,36 @@
                                 </div>
                             </div>
 
-                            {/* 오른쪽: 면적 비례 벤다이어그램 시각화 */}
-                            <div className="w-full lg:w-[45%] flex flex-col items-center justify-center p-2 md:p-4 overflow-hidden">
-                                <div className="relative w-56 h-56 md:w-64 md:h-64 mt-4 md:mt-0 transform scale-90 md:scale-100 flex items-center justify-center">
-                                    <div className="absolute inset-[-20px] border-2 border-dashed border-slate-300 rounded-xl bg-white shadow-sm -z-10 flex flex-col justify-between p-2">
-                                        <span className="text-[10px] font-bold text-slate-400">전체 가구 (100%)</span>
-                                        <span className="text-xs font-black text-rose-600 bg-rose-50 w-max px-2 rounded">사각지대(여집합): {blindSpot}%</span>
-                                    </div>
-
-                                    <div className="relative w-full h-full flex items-center justify-center">
-                                        {/* Circle A */}
-                                        <div className={`absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-blue-300/50 border-2 border-blue-500 -top-4 -left-2 venn-circle flex flex-col items-center justify-start pt-3 md:pt-4 ${valA === 0 ? 'opacity-0' : 'opacity-100'}`} style={{transform: `scale(${scaleA})`}}>
-                                            <span className="text-[10px] font-bold text-blue-900 leading-none">순수 A</span>
-                                            <span className="font-black text-blue-950 text-sm leading-none mt-1">{onlyA}%</span>
-                                        </div>
-
-                                        {/* Circle B */}
-                                        <div className={`absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-rose-300/50 border-2 border-rose-500 -top-4 -right-2 venn-circle flex flex-col items-center justify-start pt-3 md:pt-4 ${valB === 0 ? 'opacity-0' : 'opacity-100'}`} style={{transform: `scale(${scaleB})`}}>
-                                            <span className="text-[10px] font-bold text-rose-900 leading-none">순수 B</span>
-                                            <span className="font-black text-rose-950 text-sm leading-none mt-1">{onlyB}%</span>
-                                        </div>
-
-                                        {/* Circle C */}
-                                        <div className={`absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-emerald-300/50 border-2 border-emerald-500 bottom-0 venn-circle flex flex-col items-center justify-end pb-3 md:pb-4 ${valC === 0 ? 'opacity-0' : 'opacity-100'}`} style={{transform: `scale(${scaleC})`}}>
-                                            <span className="text-[10px] font-bold text-emerald-900 leading-none">순수 C</span>
-                                            <span className="font-black text-emerald-950 text-sm leading-none mt-1">{onlyC}%</span>
-                                        </div>
-                                    </div>
-
-                                    {/* 교집합 값들 */}
-                                    <div className="absolute top-[40px] md:top-[50px] left-[95px] md:left-[110px] w-10 text-center z-10"><span className="text-[10px] md:text-[11px] font-black text-indigo-900 bg-white/70 px-1 rounded">{onlyAB}%</span></div>
-                                    <div className="absolute bottom-[65px] md:bottom-[70px] left-[50px] md:left-[60px] w-10 text-center z-10"><span className="text-[10px] md:text-[11px] font-black text-teal-900 bg-white/70 px-1 rounded">{onlyCA}%</span></div>
-                                    <div className="absolute bottom-[65px] md:bottom-[70px] right-[50px] md:right-[60px] w-10 text-center z-10"><span className="text-[10px] md:text-[11px] font-black text-orange-900 bg-white/70 px-1 rounded">{onlyBC}%</span></div>
-                                    <div className="absolute top-[90px] md:top-[100px] left-[95px] md:left-[110px] w-10 text-center z-20"><span className="text-xs md:text-sm font-black text-purple-900 bg-white/90 px-1 rounded-full shadow-sm">{valABC}%</span></div>
+                            {/* 오른쪽: SVG 수학적 면적 비례 모델 렌더링 영역 */}
+                            <div className="w-full lg:w-[45%] flex flex-col items-center justify-center p-2 md:p-4 overflow-hidden relative min-h-[350px]">
+                                <div className="absolute top-0 left-0 border-2 border-dashed border-slate-300 rounded-xl bg-white shadow-sm flex flex-col justify-between p-2 z-10">
+                                    <span className="text-[10px] font-bold text-slate-400">전체 가구 (100%)</span>
+                                    <span className="text-xs font-black text-rose-600 bg-rose-50 w-max px-2 rounded">사각지대(여집합): {blindSpot}%</span>
                                 </div>
+
+                                <svg viewBox="-200 -200 400 400" className="w-full h-full max-w-[380px] max-h-[380px] overflow-visible mt-6">
+                                    
+                                    {/* 원형 영역 렌더링 */}
+                                    {valA > 0 && <circle cx={fxA} cy={fyA} r={rA} fill="#93c5fd" opacity="0.65" className="venn-circle" />}
+                                    {valB > 0 && <circle cx={fxB} cy={fyB} r={rB} fill="#fda4af" opacity="0.65" className="venn-circle" />}
+                                    {valC > 0 && <circle cx={fxC} cy={fyC} r={rC} fill="#6ee7b7" opacity="0.65" className="venn-circle" />}
+                                    
+                                    {/* 테두리 렌더링 */}
+                                    {valA > 0 && <circle cx={fxA} cy={fyA} r={rA} fill="none" stroke="#3b82f6" strokeWidth="2" className="venn-circle opacity-50" />}
+                                    {valB > 0 && <circle cx={fxB} cy={fyB} r={rB} fill="none" stroke="#f43f5e" strokeWidth="2" className="venn-circle opacity-50" />}
+                                    {valC > 0 && <circle cx={fxC} cy={fyC} r={rC} fill="none" stroke="#10b981" strokeWidth="2" className="venn-circle opacity-50" />}
+
+                                    {/* 데이터 라벨 텍스트 */}
+                                    {valA > 0 && onlyA > 0 && <FObj x={pA.x} y={pA.y}><div className="flex flex-col items-center"><span className="text-[9px] font-bold text-blue-900 leading-none mb-0.5 drop-shadow-md">순수A</span><span className="text-sm font-black text-blue-900 bg-white/70 px-1 rounded shadow-sm leading-none">{onlyA}%</span></div></FObj>}
+                                    {valB > 0 && onlyB > 0 && <FObj x={pB.x} y={pB.y}><div className="flex flex-col items-center"><span className="text-[9px] font-bold text-rose-900 leading-none mb-0.5 drop-shadow-md">순수B</span><span className="text-sm font-black text-rose-900 bg-white/70 px-1 rounded shadow-sm leading-none">{onlyB}%</span></div></FObj>}
+                                    {valC > 0 && onlyC > 0 && <FObj x={pC.x} y={pC.y}><div className="flex flex-col items-center"><span className="text-[9px] font-bold text-emerald-900 leading-none mb-0.5 drop-shadow-md">순수C</span><span className="text-sm font-black text-emerald-900 bg-white/70 px-1 rounded shadow-sm leading-none">{onlyC}%</span></div></FObj>}
+
+                                    {valAB > 0 && onlyAB > 0 && <FObj x={pAB.x} y={pAB.y} width={50} height={24}><span className="text-[11px] font-black text-indigo-900 bg-white/90 px-1.5 py-0.5 rounded shadow-sm border border-indigo-100">{onlyAB}%</span></FObj>}
+                                    {valBC > 0 && onlyBC > 0 && <FObj x={pBC.x} y={pBC.y} width={50} height={24}><span className="text-[11px] font-black text-orange-900 bg-white/90 px-1.5 py-0.5 rounded shadow-sm border border-orange-100">{onlyBC}%</span></FObj>}
+                                    {valCA > 0 && onlyCA > 0 && <FObj x={pCA.x} y={pCA.y} width={50} height={24}><span className="text-[11px] font-black text-teal-900 bg-white/90 px-1.5 py-0.5 rounded shadow-sm border border-teal-100">{onlyCA}%</span></FObj>}
+
+                                    {valABC > 0 && <FObj x={pABC.x} y={pABC.y} width={50} height={26}><span className="text-sm font-black text-purple-900 bg-white px-2 py-0.5 rounded-full shadow-md border-2 border-purple-300 z-50">{valABC}%</span></FObj>}
+                                </svg>
                             </div>
                         </div>
 
