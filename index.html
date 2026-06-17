@@ -478,6 +478,22 @@
                                                     </span>
                                                 </div>
                                             </div>
+
+                                            {/* 발문 5 */}
+                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-slate-600/50 hover:bg-slate-700/70 transition-colors">
+                                                <p className="text-yellow-300 font-bold text-xs mb-1">Q. 변화율 함정 (% vs %p)</p>
+                                                <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-3">
+                                                    "A제도에 대한 t년의 수급자 비율이 16%, t+30년의 수급자 비율이 8%이다."
+                                                </p>
+                                                <div className="bg-slate-900/50 p-3 rounded-lg text-slate-300 text-sm border-l-4 border-yellow-400">
+                                                    <span className="text-yellow-400 font-black">👉 번역:</span> 수급자 비율은 8% 감소한 것이 아니라 <b>50% 감소</b>한 것입니다!<br/>
+                                                    1. 16%에서 8%로 수치 자체가 8만큼 줄어든 것은 <b>8%p(퍼센트포인트) 감소</b>입니다.<br/>
+                                                    2. 16이라는 기준값에서 절반(8)이 날아갔으므로 <b>변화율은 50% 감소</b>입니다.<br/>
+                                                    <span className="font-bold text-rose-300 mt-2 block bg-slate-800 p-2 rounded text-[11px]">
+                                                        🚨 평가원이 가장 좋아하는 말장난! "% 감소"와 "%p 감소"를 반드시 구별하세요.
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -1329,7 +1345,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>wn
                 </div>
             );
         }
