@@ -413,6 +413,74 @@
                                             <li className="flex gap-2 items-start"><span className="text-emerald-500 mt-0.5">3️⃣</span> <span>이후 모든 비율(유소년, 노년 등)에 각각의 분모(100a, 80a)를 곱하여 <b>완벽한 명수 데이터</b>로 변환 후 선지를 판별합니다.</span></li>
                                         </ul>
                                     </div>
+                                    
+                                    {/* 새롭게 추가된 최고난도 발문 번역기 */}
+                                    <div className="bg-slate-800 rounded-2xl p-5 md:p-6 shadow-xl border border-slate-700 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 opacity-10 text-7xl -translate-y-2 translate-x-4 mix-blend-overlay">💡</div>
+                                        <div className="flex items-center gap-3 mb-6">
+                                            <span className="bg-yellow-400 text-slate-900 text-xs font-black px-3 py-1 rounded-full whitespace-nowrap shadow-sm">극악 난이도 발문 번역</span>
+                                            <h3 className="font-black text-lg md:text-xl text-white leading-tight">"이 말이 대체 무슨 뜻이죠?"</h3>
+                                        </div>
+                                        
+                                        <div className="space-y-4">
+                                            {/* 발문 1 */}
+                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-slate-600/50 hover:bg-slate-700/70 transition-colors">
+                                                <p className="text-rose-300 font-bold text-xs mb-1">Q. 계층 이동</p>
+                                                <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-3">
+                                                    "모든 부모의 자녀는 1명씩이다."
+                                                </p>
+                                                <div className="bg-slate-900/50 p-3 rounded-lg text-slate-300 text-sm border-l-4 border-rose-400">
+                                                    <span className="text-rose-400 font-black">👉 번역:</span> 부모 세대의 총인구수와 자녀 세대의 <b>총인구수가 100% 동일</b>하다. <br/>
+                                                    <span className="text-[11px] text-slate-400 mt-1 block">(이 문장이 있어야만 100명이라는 가상의 숫자로 표를 그릴 수 있는 <b>명분</b>이 생깁니다.)</span>
+                                                </div>
+                                            </div>
+
+                                            {/* 발문 2 */}
+                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-slate-600/50 hover:bg-slate-700/70 transition-colors">
+                                                <p className="text-blue-300 font-bold text-xs mb-1">Q. 계층 이동</p>
+                                                <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-3">
+                                                    "A에 해당하는 자녀 중 부모보다 계층이 상승한 자녀 수는 하강한 자녀 수의 2배이다."
+                                                </p>
+                                                <div className="bg-slate-900/50 p-3 rounded-lg text-slate-300 text-sm border-l-4 border-blue-400">
+                                                    <span className="text-blue-400 font-black">👉 번역:</span> 자녀가 'A계층'인 <b>세로줄(열)</b>만 봅니다.<br/>
+                                                    만약 A가 <b>'자녀 중층'</b>이라면? <br/>
+                                                    [하→중] 상승 이동 칸 = [상→중] 하강 이동 칸 × 2 <br/>
+                                                    <span className="text-yellow-300 font-bold text-[11px] mt-1 block">💡 대각선(대물림) 칸은 제외하고 위아래 칸만 비교하는 것이 핵심!</span>
+                                                </div>
+                                            </div>
+
+                                            {/* 발문 3 */}
+                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-slate-600/50 hover:bg-slate-700/70 transition-colors">
+                                                <p className="text-emerald-300 font-bold text-xs mb-1">Q. 계층 이동</p>
+                                                <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-3">
+                                                    "부모와 계층이 일치하는 자녀 수는 계층 간 차이가 없다."
+                                                </p>
+                                                <div className="bg-slate-900/50 p-3 rounded-lg text-slate-300 text-sm border-l-4 border-emerald-400">
+                                                    <span className="text-emerald-400 font-black">👉 번역:</span> 표의 <b>대각선 3칸의 인구수가 모두 똑같다!</b><br/>
+                                                    [상→상] = [중→중] = [하→하] <br/>
+                                                    <span className="text-[11px] text-slate-400 mt-1 block">(미지수 x로 세 칸을 모두 채우고 시작하면 방정식이 쉽게 풀립니다.)</span>
+                                                </div>
+                                            </div>
+
+                                            {/* 발문 4 */}
+                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-slate-600/50 hover:bg-slate-700/70 transition-colors">
+                                                <p className="text-purple-300 font-bold text-xs mb-1">Q. 복지 제도</p>
+                                                <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-3">
+                                                    "중복 수급자 비율은 t+30년이 t년에 비해 50% 감소하였고, 중복 수급자 수는 t년과 t+30년이 동일하다."
+                                                </p>
+                                                <div className="bg-slate-900/50 p-3 rounded-lg text-slate-300 text-sm border-l-4 border-purple-400">
+                                                    <span className="text-purple-400 font-black">👉 번역:</span> <b>비율(%)</b>과 <b>인구수(명)</b>의 완벽한 엇갈림입니다.<br/>
+                                                    1. 비율이 절반(50%)이 되었는데 명수가 똑같다?<br/>
+                                                    2. 이는 분모인 <b>'전체 인구수'가 정확히 2배로 증가했다</b>는 뜻입니다!<br/>
+                                                    <span className="font-bold text-yellow-300 mt-2 block bg-slate-800 p-2 rounded text-[11px]">
+                                                        식: (중복 수 / t년 인구) = 2 × (중복 수 / t+30년 인구)<br/>
+                                                        결론: t년 전체 인구 = 100a, t+30년 전체 인구 = 200a 세팅!
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
