@@ -9,7 +9,7 @@
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel (안정성 확보를 위해 특정 버전 고정 및 설정 추가) -->
+    <!-- Babel (안정화 버전 고정) -->
     <script src="https://unpkg.com/@babel/standalone@7.23.10/babel.min.js"></script>
     
     <style>
@@ -59,7 +59,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fade-in-up 0.3s ease-out; }
         
-        .venn-circle { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); mix-blend-mode: multiply; }
+        .venn-circle { transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s; mix-blend-mode: multiply; }
 
         .math-fraction { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 4px; }
         .math-fraction .num { border-bottom: 2px solid currentColor; padding: 0 4px; line-height: 1.2; }
@@ -161,14 +161,13 @@
 
             return (
                 <div className="min-h-screen bg-slate-50 pb-28 text-slate-800 font-sans">
-                    {/* Header */}
                     <header className="glass-panel sticky top-0 z-50 px-4 py-4 flex justify-center items-center">
                         <div className="max-w-4xl w-full flex items-center justify-between">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-gradient-to-tr from-indigo-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg transform -rotate-3">S</div>
                                 <div>
                                     <h1 className="font-black text-lg tracking-tight text-slate-800 leading-none">사문 1타.zip</h1>
-                                    <p className="text-[10px] text-slate-500 font-bold mt-1">2027 수능특강 완벽 대비</p>
+                                    <p className="text-[10px] text-slate-500 font-bold mt-1">최상위권 도약 프리미엄 클래스</p>
                                 </div>
                             </div>
                             <div className="text-xs font-black bg-slate-800 text-yellow-300 px-4 py-2 rounded-full shadow-md animate-pulse-soft">
@@ -353,50 +352,64 @@
                         <div className={`tab-content ${activeTab === 'solution' ? 'active' : ''}`}>
                             <div className="mb-8 p-6 md:p-8 bg-white rounded-[2rem] border-2 border-indigo-100 shadow-sm relative overflow-hidden">
                                 <h2 className="text-2xl font-black mb-2 text-slate-800">수능 기출 유형 분석 & 첫 단추 꿰기</h2>
-                                <p className="text-slate-500 text-sm font-medium mb-6">수능특강과 평가원 모의고사 기출을 바탕으로, "어디서부터 손대야 할지 모르는" 문제를 타파합니다.</p>
+                                <p className="text-slate-500 text-sm font-medium mb-6">수능특강과 평가원 기출을 바탕으로, "어디서부터 손대야 할지 모르는" 킬러 문제의 핵심 원리를 타파합니다.</p>
                                 
                                 <div className="space-y-8">
                                     <div className="bg-slate-50 rounded-2xl p-5 md:p-6 border border-slate-200">
                                         <div className="flex items-center gap-3 mb-4">
                                             <span className="bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded whitespace-nowrap">유형 1</span>
-                                            <h3 className="font-bold text-lg text-slate-800 leading-tight">국가 간 계층 구조 비교 (상대비율 제시형)</h3>
+                                            <h3 className="font-bold text-lg text-slate-800 leading-tight">비율(%)의 절댓값화 (미지수 연립)</h3>
                                         </div>
                                         <div className="bg-white p-4 rounded-xl border border-slate-200 mb-4 shadow-sm">
                                             <p className="text-xs text-slate-400 font-bold mb-2">[발문 예시]</p>
                                             <p className="text-sm font-medium text-slate-700 leading-relaxed">
-                                                표는 갑~병국의 계층 구성 비율을 나타낸다... <br/>
-                                                * 갑국의 상층 비율은 20%, 중층 50% / 을국 상층 10%, 중층 30%...<br/>
-                                                * <b>갑국의 하층 인구는 을국 하층 인구의 2배</b>이고...
+                                                * 갑국의 상층 비율은 20%, 을국 상층은 10% 이다.<br/>
+                                                * <b>갑국의 하층 인구는 을국 하층 인구의 2배</b>이다.
                                             </p>
                                         </div>
                                         <h4 className="font-bold text-indigo-700 text-sm mb-2">🚀 이렇게 시작하세요!</h4>
                                         <ul className="space-y-3 text-sm text-slate-700 font-medium">
-                                            <li className="flex gap-2 items-start"><span className="text-blue-500 mt-0.5">1️⃣</span> <span>표의 비율 퍼센트 옆에 <b>무조건 미지수 a, b, c를 곱해서 적어둡니다.</b><br/>(예: 갑국 상층 20a, 을국 상층 10b)</span></li>
-                                            <li className="flex gap-2 items-start"><span className="text-blue-500 mt-0.5">2️⃣</span> <span>문제 하단의 <b>'명수(인구)'를 직접적으로 비교하는 조건문</b>을 찾습니다.</span></li>
-                                            <li className="flex gap-2 items-start"><span className="text-blue-500 mt-0.5">3️⃣</span> <span>"갑국 하층 인구(30a) = 을국 하층 인구(60b) × 2" 식을 세웁니다. <br/>👉 30a = 120b 👉 <span className="bg-yellow-100 px-1 font-bold text-rose-600">a = 4b</span> 도출!</span></li>
-                                            <li className="flex gap-2 items-start"><span className="text-blue-500 mt-0.5">4️⃣</span> <span>이제 갑국의 모든 수치에 a 대신 4b를 넣어 'b'로 대통합합니다. 끝!</span></li>
+                                            <li className="flex gap-2 items-start"><span className="text-blue-500 mt-0.5">1️⃣</span> <span>비율 퍼센트 옆에 <b>반드시 서로 다른 미지수 a, b를 곱합니다.</b><br/>(갑국 하층 30a, 을국 하층 60b)</span></li>
+                                            <li className="flex gap-2 items-start"><span className="text-blue-500 mt-0.5">2️⃣</span> <span>명수를 비교하는 단서를 통해 방정식을 세웁니다.<br/>👉 30a = 120b 👉 <span className="bg-yellow-100 px-1 font-bold text-rose-600">a = 4b</span> 도출!</span></li>
                                         </ul>
                                     </div>
 
                                     <div className="bg-slate-50 rounded-2xl p-5 md:p-6 border border-slate-200">
                                         <div className="flex items-center gap-3 mb-4">
                                             <span className="bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded whitespace-nowrap">유형 2</span>
-                                            <h3 className="font-bold text-lg text-slate-800 leading-tight">세대 간 계층 이동 (방향성 및 이동량 제시형)</h3>
+                                            <h3 className="font-bold text-lg text-slate-800 leading-tight">세대 간 이동 스도쿠표 그리기</h3>
                                         </div>
                                         <div className="bg-white p-4 rounded-xl border border-slate-200 mb-4 shadow-sm">
                                             <p className="text-xs text-slate-400 font-bold mb-2">[발문 예시]</p>
                                             <p className="text-sm font-medium text-slate-700 leading-relaxed">
-                                                * 부모 세대는 피라미드, 자녀 세대는 다이아몬드형 계층 구조이다.<br/>
                                                 * 상승 이동한 인구는 하강 이동한 인구의 2배이다.<br/>
                                                 * 부모 상층 → 자녀 중층 이동은 전체의 10%이다.
                                             </p>
                                         </div>
                                         <h4 className="font-bold text-rose-700 text-sm mb-2">🚀 이렇게 시작하세요!</h4>
                                         <ul className="space-y-3 text-sm text-slate-700 font-medium">
-                                            <li className="flex gap-2 items-start"><span className="text-rose-500 mt-0.5">1️⃣</span> <span>백지상태에서 <b>무조건 3x3 스도쿠 표(가로 자녀, 세로 부모)</b>를 크게 그립니다.</span></li>
-                                            <li className="flex gap-2 items-start"><span className="text-rose-500 mt-0.5">2️⃣</span> <span>외곽의 <b>합계(주변분포)</b> 칸부터 채웁니다. 비율이 명확하지 않다면 상, 중, 하 비율에 맞게 미지수나 부등호(상&lt;중&lt;하)를 적어둡니다.</span></li>
-                                            <li className="flex gap-2 items-start"><span className="text-rose-500 mt-0.5">3️⃣</span> <span>문제 조건 중 <b>"~에서 ~로 이동은 %이다"와 같이 핀포인트로 알려주는 절대 단서</b>를 찾아 해당 칸(셀)에 숫자를 확정합니다.</span></li>
-                                            <li className="flex gap-2 items-start"><span className="text-rose-500 mt-0.5">4️⃣</span> <span><b>[상승 이동=좌하단 3칸 합], [하강 이동=우상단 3칸 합]</b> 공식을 이용하여 연립방정식을 풉니다. 바로 다음 탭 '스도쿠 훈련'에서 실습해보세요!</span></li>
+                                            <li className="flex gap-2 items-start"><span className="text-rose-500 mt-0.5">1️⃣</span> <span>외곽의 <b>합계(주변분포)</b> 칸부터 채우고, 피라미드/다이아몬드 등 구조 단서를 적습니다.</span></li>
+                                            <li className="flex gap-2 items-start"><span className="text-rose-500 mt-0.5">2️⃣</span> <span><b>[상승 이동=좌하단 3칸 합], [하강 이동=우상단 3칸 합]</b> 공식을 통해 방정식을 풉니다. 다음 탭 '스도쿠 훈련'에서 실습해보세요!</span></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div className="bg-slate-50 rounded-2xl p-5 md:p-6 border border-slate-200 shadow-md border-emerald-300">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <span className="bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded whitespace-nowrap">유형 3 (최고난도)</span>
+                                            <h3 className="font-bold text-lg text-slate-800 leading-tight">전체 인구 불일치 (연도별/집단 간)</h3>
+                                        </div>
+                                        <div className="bg-white p-4 rounded-xl border border-slate-200 mb-4 shadow-sm">
+                                            <p className="text-xs text-slate-400 font-bold mb-2">[발문 예시]</p>
+                                            <p className="text-sm font-medium text-slate-700 leading-relaxed">
+                                                * t년 대비 t+50년의 전체 인구는 20% 감소하였다.<br/>
+                                                * A지역 인구는 B지역 인구의 2.5배이다.
+                                            </p>
+                                        </div>
+                                        <h4 className="font-bold text-emerald-700 text-sm mb-2">🚀 초지일관 미지수 세팅법</h4>
+                                        <ul className="space-y-3 text-sm text-slate-700 font-medium">
+                                            <li className="flex gap-2 items-start"><span className="text-emerald-500 mt-0.5">1️⃣</span> <span>전체 인구가 다르다는 말이 나오는 순간, 표 안의 수치는 <b>비율이 아니라 실제 명수를 뜻하는 식</b>으로 전부 바꿔야 합니다.</span></li>
+                                            <li className="flex gap-2 items-start"><span className="text-emerald-500 mt-0.5">2️⃣</span> <span>"t년 대비 t+50년 인구 20% 감소" 👉 t년 전체를 <b className="text-blue-600 bg-blue-50 px-1">100a</b>로, t+50년 전체를 <b className="text-rose-600 bg-rose-50 px-1">80a</b>로 설정합니다.</span></li>
+                                            <li className="flex gap-2 items-start"><span className="text-emerald-500 mt-0.5">3️⃣</span> <span>이후 모든 비율(유소년, 노년 등)에 각각의 분모(100a, 80a)를 곱하여 <b>완벽한 명수 데이터</b>로 변환 후 선지를 판별합니다.</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -451,7 +464,7 @@
         }
 
         // ==========================================
-        // 스도쿠 훈련 앱 
+        // 스도쿠 훈련 앱 (총 8단계 - 수능 3점 극악 난이도 포함)
         // ==========================================
         function SudokuApp() {
             const [level, setLevel] = useState('Lv1. 기초');
@@ -463,6 +476,7 @@
                     desc: "가장 기본적인 덧셈/뺄셈 연습 (전체 100명)",
                     conditions: ["부모: 상(20) 중(50) 하(30)", "자녀: 상(30) 중(40) 하(30)"],
                     hints: ["상층 대물림은 10명, 하층 대물림은 20명이다.", "부모가 하층인데 자녀가 상층으로 이동한 사람은 5명이다.", "부모 상층 → 자녀 하층으로의 이동은 0명이다."],
+                    totalParents: 100, totalChildren: 100,
                     parents: { S: 20, M: 50, L: 30 }, children: { S: 30, M: 40, L: 30 },
                     correct: { SS: '10', SM: '10', SL: '0', MS: '15', MM: '25', ML: '10', LS: '5', LM: '5', LL: '20' },
                     solutionSteps: [
@@ -479,10 +493,11 @@
                     desc: "비례배분이 포함된 기출 변형 (전체 100명)",
                     conditions: ["부모 세대 상:중:하 = 1:6:3", "자녀 세대 상:중:하 = 2:5:3"],
                     hints: ["세대 간 하강 이동은 없다 (표 우상단 3칸이 모두 0)", "상층 대물림은 10명이다."],
+                    totalParents: 100, totalChildren: 100,
                     parents: { S: 10, M: 60, L: 30 }, children: { S: 20, M: 50, L: 30 },
                     correct: { SS: '10', SM: '0', SL: '0', MS: '10', MM: '50', ML: '0', LS: '0', LM: '0', LL: '30' },
                     solutionSteps: [
-                        "1. 비율 배분: 부모는 10, 60, 30명. 자녀는 20, 50, 30명.",
+                        "1. 비율 배분: 총 인구가 100명이므로 비율=명수. 부모는 10, 60, 30명. 자녀는 20, 50, 30명.",
                         "2. 하강 이동 없음 적용: [상→중]=0, [상→하]=0, [중→하]=0",
                         "3. 힌트 적용: [상→상]=10. (부모 상층 총합 10과 일치!)",
                         "4. 세로보기: 자녀 하층(30)을 채울 수 있는 곳은 오직 부모 하층뿐이므로 [하→하]=30",
@@ -495,6 +510,7 @@
                     desc: "구조 형태 제시형 (전체 100명)",
                     conditions: ["부모 세대는 피라미드형, 자녀 세대는 다이아몬드형이다.", "부모 상층은 20명, 자녀 하층은 20명이다."],
                     hints: ["상층 대물림과 하층 대물림 인구는 각각 15명이다.", "세대 간 하강 이동 인구는 총 10명이다.", "부모 상층→자녀 하층, 부모 하층→자녀 상층 이동은 없다(0명)."],
+                    totalParents: 100, totalChildren: 100,
                     parents: { S: 20, M: 30, L: 50 }, children: { S: 20, M: 60, L: 20 },
                     correct: { SS: '15', SM: '5', SL: '0', MS: '5', MM: '20', ML: '5', LS: '0', LM: '35', LL: '15' },
                     solutionSteps: [
@@ -513,6 +529,7 @@
                     desc: "단서의 조합 추론형 (전체 100명)",
                     conditions: ["부모 세대는 피라미드형이고, 상층과 중층의 인구가 같다.", "자녀 세대는 다이아몬드형이고, 상층과 하층의 인구가 같다."],
                     hints: ["부모 세대 상층 인구와 자녀 세대 상층 인구는 동일하다.", "세대 간 하강 이동은 발생하지 않았다 (0명)."],
+                    totalParents: 100, totalChildren: 100,
                     parents: { S: 20, M: 20, L: 60 }, children: { S: 20, M: 60, L: 20 },
                     correct: { SS: '20', SM: '0', SL: '0', MS: '0', MM: '20', ML: '0', LS: '0', LM: '40', LL: '20' },
                     solutionSteps: [
@@ -526,21 +543,110 @@
                         "8. 부모하(60) 중 20명이 대물림했으므로 나머지는 [하→중]=40."
                     ]
                 },
-                'Lv5. 킬러': {
-                    desc: "초고난도 상대비율 추론 (전체 100명)",
-                    conditions: ["부모 세대는 피라미드형, 자녀 세대는 다이아몬드형이다.", "부모 상층은 자녀 하층 인구와 동일하다."],
-                    hints: ["세대 간 하강 이동은 없다(0명).", "상층 대물림 인구는 하층 대물림 인구와 동일하다.", "부모 하층에서 자녀 상층으로 상승 이동한 사람은 10명이다."],
+                'Lv5. 극악': {
+                    desc: "논리적 도출 능력 극대화 (전체 100명)",
+                    conditions: ["전체 인구는 100명이다.", "부모 세대의 계층별 인구 비(상:중:하)는 1:3:6 이다.", "자녀 세대의 하층 인구는 부모 세대의 상층 인구와 동일하다."],
+                    hints: ["세대 간 하강 이동은 없다(0명).", "상층 대물림 인구는 하층 대물림 인구와 동일하다.", "부모 하층에서 자녀 상층으로 상승 이동한 사람은 하층 대물림 인구의 2배이다.", "부모 중층에서 상승 이동한 인구는 없다."],
+                    totalParents: 100, totalChildren: 100,
                     parents: { S: 10, M: 30, L: 60 }, children: { S: 30, M: 60, L: 10 },
-                    correct: { SS: '10', SM: '0', SL: '0', MS: '10', MM: '20', ML: '0', LS: '10', LM: '40', LL: '10' },
+                    correct: { SS: '10', SM: '0', SL: '0', MS: '0', MM: '30', ML: '0', LS: '20', LM: '30', LL: '10' },
                     solutionSteps: [
-                        "1. 구조 단서 분석: 하강 이동=0 이므로 우상단 3칸 모두 0.",
-                        "2. 부모상=자녀하=x. 하강이동이 없으므로 자녀 하층은 오직 부모 하층에서만 옴. 즉 [하→하]=x.",
-                        "3. 상층 대물림=하층 대물림 이므로 [상→상]=x.",
-                        "4. 부모상 총합이 x인데 [상→상]=x 이면 부모상의 이동은 완벽 성립함.",
-                        "5. 힌트3 적용: [하→상]=10.",
-                        "6. 여기서 x=10으로 가정. (킬러 특성상 직관적 대입). 부모상=10, 자녀하=10. [하→하]=10.",
-                        "7. [하→상]=10. 부모하층을 60으로 설정해봄(피라미드). 그럼 [하→중]=60-10-10=40.",
-                        "8. 부모중을 30으로 설정해봄. 자녀상 총합을 맞추기 위해 [중→상]=10. 그럼 [중→중]=20. 자녀중=60(다이아). 완벽히 모든 조건 성립!"
+                        "1. 부모 인구: 1:3:6 이므로 상(10), 중(30), 하(60).",
+                        "2. 조건 적용: 자녀 하층 = 부모 상층 = 10명.",
+                        "3. 힌트1: 하강 이동=0 이므로 우상단 3칸 [상→중], [상→하], [중→하] = 0명.",
+                        "4. 세로보기: 자녀하(10)을 채울 곳은 부모하 뿐이므로 [하→하]=10.",
+                        "5. 힌트2: 상층 대물림 = 하층 대물림(10) 이므로 [상→상]=10.",
+                        "6. 힌트3: [하→상] = [하→하](10) × 2 = 20명.",
+                        "7. 가로빼기: 부모하(60) - [하→상](20) - [하→하](10) = [하→중]=30명.",
+                        "8. 힌트4: [중→상]=0명. 가로빼기: 부모중(30) - [중→상](0) - [중→하](0) = [중→중]=30명.",
+                        "9. 세로합성: 자녀상=10+0+20=30명, 자녀중=0+30+30=60명. 직관적 대입 없이 100% 논리 도출 완료!"
+                    ]
+                },
+                'Lv6. 상대비(比) 타파': {
+                    desc: "비율(%)과 실제 인구수(명) 분리형 (전체 300명)",
+                    conditions: [
+                        "조사 대상 전체 인구는 300명이다.", 
+                        "자녀 세대는 다이아몬드형, 부모 세대는 피라미드형이다.", 
+                        "자녀 세대 중층 인구는 하층 인구의 3배, 상층과 하층 인구는 동일하다."
+                    ],
+                    hints: [
+                        "부모 세대의 상:중:하 비율은 1:2:3 이다.", 
+                        "세대 간 하강 이동 인구는 전체의 10% 이다.", 
+                        "부모 하층에서 자녀 상층으로 이동한 인구는 부모 상층에서 자녀 하층으로 이동한 인구의 2배이다.",
+                        "상층 대물림 인구는 자녀 세대 하층 인구의 절반과 같다.",
+                        "부모 세대 하층 인구 중 계층을 대물림한 인구는 40명이다."
+                    ],
+                    totalParents: 300, totalChildren: 300,
+                    parents: { S: 50, M: 100, L: 150 }, children: { S: 60, M: 180, L: 60 },
+                    correct: { SS: '30', SM: '10', SL: '10', MS: '10', MM: '80', ML: '10', LS: '20', LM: '90', LL: '40' },
+                    solutionSteps: [
+                        "1. 인구 환산: 300명 기준. 부모(1:2:3) = 상50, 중100, 하150명.",
+                        "2. 자녀 환산: 상=하, 중=3*하. x+3x+x=300 ➜ 하=60, 중=180, 상=60명. (다이아몬드형 충족)",
+                        "3. 힌트4: [상→상] = 자녀하(60)/2 = 30명. 부모상(50)이므로 [상→중] + [상→하] = 20명.",
+                        "4. 힌트2: 하강이동 = 300의 10% = 30명. 하강([상→중]+[상→하]+[중→하]) = 30. 즉, 20 + [중→하] = 30 ➜ [중→하]=10명.",
+                        "5. 힌트5: [하→하] = 40명. 세로보기: 자녀하(60) = [상→하] + [중→하](10) + [하→하](40) ➜ [상→하] = 10명.",
+                        "6. 과정3 적용: [상→하](10) 이므로 [상→중] = 10명.",
+                        "7. 힌트3: [하→상] = 2 × [상→하](10) = 20명.",
+                        "8. 세로보기: 자녀상(60) = [상→상](30) + [중→상] + [하→상](20) ➜ [중→상]=10명.",
+                        "9. 가로빼기: 부모중(100) = [중→상](10) + [중→중] + [중→하](10) ➜ [중→중]=80명.",
+                        "10. 가로빼기: 부모하(150) = [하→상](20) + [하→중] + [하→하](40) ➜ [하→중]=90명. 완벽 성립!"
+                    ]
+                },
+                'Lv7. 수능 3점 조건부': {
+                    desc: "초고난도 조건부 분수 결합 (전체 400명)",
+                    conditions: [
+                        "조사 대상 전체 인구는 400명이다.",
+                        "부모 세대 상/중/하 비율은 10:30:60 (%)이다.",
+                        "자녀 세대 상/중/하 비율은 20:50:30 (%)이다."
+                    ],
+                    hints: [
+                        "세대 간 하강 이동은 부모 중층에서만 나타났다.",
+                        "부모와 자녀의 계층이 일치하는 인구 총합은 자녀 세대 중층 인구의 4/5 이다.",
+                        "자녀 세대 상층 인구 중 상승 이동한 사람의 수와 부모 세대 중층 인구 중 계층이 일치하는 사람의 수는 같다.",
+                        "부모 세대 하층 인구 중 2단계 상승 이동(하→상)한 사람은 없다."
+                    ],
+                    totalParents: 400, totalChildren: 400,
+                    parents: { S: 40, M: 120, L: 240 }, children: { S: 80, M: 200, L: 120 },
+                    correct: { SS: '40', SM: '0', SL: '0', MS: '40', MM: '40', ML: '40', LS: '0', LM: '160', LL: '80' },
+                    solutionSteps: [
+                        "1. 인구 환산: 400명. 부모는 상(40), 중(120), 하(240). 자녀는 상(80), 중(200), 하(120)명.",
+                        "2. 힌트1: 상층의 하강이동은 0명. [상→중]=0, [상→하]=0. 남은 부모상층은 모두 대물림되므로 [상→상]=40명.",
+                        "3. 힌트4: [하→상]=0명.",
+                        "4. 세로보기: 자녀상(80) = [상→상](40) + [중→상] + [하→상](0). 따라서 [중→상]=40명.",
+                        "5. 힌트3: 자녀상층 중 상승이동([중→상]+[하→상]=40) = 부모중층 대물림([중→중]). 즉, [중→중]=40명.",
+                        "6. 힌트2: 일치 총합([상→상]+[중→중]+[하→하]) = 자녀중(200) × (4/5) = 160명. 40+40+[하→하]=160 ➜ [하→하]=80명.",
+                        "7. 가로빼기: 부모중(120) = [중→상](40) + [중→중](40) + [중→하] ➜ [중→하]=40명.",
+                        "8. 가로빼기: 부모하(240) = [하→상](0) + [하→중] + [하→하](80) ➜ [하→중]=160명.",
+                        "9. 검증: 자녀중 세로합(0+40+160=200), 자녀하 세로합(0+40+80=120). 표가 완벽히 성립합니다!"
+                    ]
+                },
+                'Lv8. 1등급 결정전': {
+                    desc: "인구 증감분을 통한 역추적 (전체 500명)",
+                    conditions: [
+                        "전체 인구는 500명이다.", 
+                        "세대 간 이동의 결과로 상층은 30명 증가, 하층은 60명 감소하였다.", 
+                        "부모 세대의 상:중:하 비율은 1:4:5 이다."
+                    ],
+                    hints: [
+                        "부모 세대 하층 인구의 40%가 계층 대물림을 하였다.", 
+                        "세대 간 상승 이동한 인구는 180명, 하강 이동한 인구는 120명이다.",
+                        "중층 대물림 인구는 전체 상승 이동 인구의 절반과 같다.",
+                        "부모가 상층인 자녀 중 하층인 인구는 10명이다."
+                    ],
+                    totalParents: 500, totalChildren: 500,
+                    parents: { S: 50, M: 200, L: 250 }, children: { S: 80, M: 230, L: 190 },
+                    correct: { SS: '10', SM: '30', SL: '10', MS: '30', MM: '90', ML: '80', LS: '40', LM: '110', LL: '100' },
+                    solutionSteps: [
+                        "1. 부모 인구: 500명을 1:4:5로 배분 ➜ 상(50), 중(200), 하(250).",
+                        "2. 자녀 인구: 상층 30 증가(50+30=80), 하층 60 감소(250-60=190). 전체 500이므로 자녀중은 500-80-190=230명.",
+                        "3. 힌트1 적용: 부모하(250)의 40% 대물림 ➜ [하→하]=100명.",
+                        "4. 힌트4 적용: [상→하]=10명. 자녀하(190) = [상→하](10) + [중→하] + [하→하](100) ➜ [중→하]=80명.",
+                        "5. 힌트2 하강(120): [상→중] + [상→하](10) + [중→하](80) = 120 ➜ [상→중] = 30명.",
+                        "6. 가로빼기: 부모상(50) = [상→상] + [상→중](30) + [상→하](10) ➜ [상→상]=10명.",
+                        "7. 힌트3 적용: 중층 대물림은 상승 이동(180)의 절반 = 90명. 즉, [중→중]=90명.",
+                        "8. 가로빼기: 부모중(200) = [중→상] + [중→중](90) + [중→하](80) ➜ [중→상]=30명.",
+                        "9. 세로빼기: 자녀상(80) = [상→상](10) + [중→상](30) + [하→상] ➜ [하→상]=40명.",
+                        "10. 가로빼기: 부모하(250) = [하→상](40) + [하→중] + [하→하](100) ➜ [하→중]=110명. 수능 킬러문항 완전 격파!"
                     ]
                 }
             };
@@ -572,8 +678,11 @@
             return (
                 <div className="animate-fade-in pb-10">
                     <div className="bg-white rounded-[2rem] p-4 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
-                        <h2 className="text-xl md:text-2xl font-black mb-2 text-slate-800">계층 스도쿠 훈련장</h2>
-                        <p className="text-slate-500 text-xs md:text-sm font-medium mb-6">모바일 최적화 및 5단계 난이도가 적용되었습니다.</p>
+                        <div className="flex items-center justify-between mb-2">
+                            <h2 className="text-xl md:text-2xl font-black text-slate-800">계층 스도쿠 훈련장</h2>
+                            <span className="bg-rose-600 text-white text-[10px] md:text-xs font-black px-2 md:px-3 py-1 rounded-full animate-pulse-soft whitespace-nowrap">킬러 문항 대규모 업데이트</span>
+                        </div>
+                        <p className="text-slate-500 text-xs md:text-sm font-medium mb-6">수능 3점짜리 기출을 반영하여 <b className="text-rose-500">인구 비율과 절댓값(명)을 엄격히 구분</b>해야 풀리는 총 8단계 난이도가 적용되었습니다.</p>
 
                         <div className="flex gap-2 mb-6 bg-slate-100 p-1.5 rounded-2xl w-full overflow-x-auto scrollbar-hide">
                             {levelsArray.map(lvl => (
@@ -588,16 +697,19 @@
                             <div className="flex-1 space-y-4">
                                 <div className="bg-slate-800 text-white p-4 md:p-6 rounded-2xl shadow-inner border border-slate-700">
                                     <h3 className="font-bold text-yellow-400 mb-3 text-[10px] md:text-xs tracking-widest uppercase">Mission [{level}]</h3>
-                                    <ul className="space-y-2 text-xs md:text-sm font-medium text-slate-100 mb-4">
+                                    <div className="bg-slate-900/50 p-3 rounded-lg mb-4 text-xs md:text-sm font-bold text-emerald-300 border border-slate-600 leading-relaxed">
+                                        👉 {currentPuzzle.desc}
+                                    </div>
+                                    <ul className="space-y-2 text-xs md:text-sm font-medium text-slate-100 mb-4 leading-relaxed">
                                         {currentPuzzle.conditions.map((cond, i) => (
-                                            <li key={i} className="flex gap-2 items-start"><span className="bg-indigo-600 text-indigo-50 px-1.5 rounded text-[10px] mt-0.5 whitespace-nowrap">C{i+1}</span> <span>{cond}</span></li>
+                                            <li key={i} className="flex gap-2 items-start"><span className="bg-indigo-600 text-indigo-50 px-1.5 rounded text-[10px] mt-0.5 whitespace-nowrap">C{i+1}</span> <span dangerouslySetInnerHTML={{ __html: cond }}></span></li>
                                         ))}
                                     </ul>
                                     
                                     {!showSolution && (
                                         <div className="space-y-2 mb-4">
                                             {currentPuzzle.hints.map((hint, i) => (
-                                                hintsUsed > i && <div key={i} className="bg-slate-700/80 text-slate-200 p-3 rounded-lg text-xs md:text-sm animate-fade-in border border-slate-600/50">💡 {hint}</div>
+                                                hintsUsed > i && <div key={i} className="bg-slate-700/80 text-slate-200 p-3 rounded-lg text-xs md:text-sm animate-fade-in border border-slate-600/50 flex gap-2 items-start leading-relaxed"><span className="text-yellow-400 mt-0.5">💡</span> <span dangerouslySetInnerHTML={{ __html: hint }}></span></div>
                                             ))}
                                         </div>
                                     )}
@@ -609,20 +721,20 @@
                                                 disabled={hintsUsed >= currentPuzzle.hints.length}
                                                 className={`flex-1 py-3 rounded-xl font-bold text-xs md:text-sm transition-colors border ${hintsUsed >= currentPuzzle.hints.length ? 'bg-white/5 text-slate-500 border-white/10 cursor-not-allowed' : 'bg-white/10 hover:bg-white/20 text-white border-white/20'}`}
                                             >
-                                                {hintsUsed >= currentPuzzle.hints.length ? '모든 힌트 개방됨' : `힌트 열기 (${hintsUsed}/${currentPuzzle.hints.length})`}
+                                                {hintsUsed >= currentPuzzle.hints.length ? '모든 힌트 개방됨' : `결정적 단서 열기 (${hintsUsed}/${currentPuzzle.hints.length})`}
                                             </button>
                                             <button onClick={triggerShowSolution} className="flex-1 py-3 bg-rose-500/80 hover:bg-rose-500 rounded-xl font-bold text-xs md:text-sm transition-colors text-white">
-                                                포기하고 풀이 보기
+                                                포기하고 해설 보기
                                             </button>
                                         </div>
                                     )}
 
                                     {showSolution && (
                                         <div className="mt-4 p-4 bg-slate-900 rounded-xl border border-yellow-500/50 animate-fade-in">
-                                            <h4 className="font-bold text-yellow-400 mb-3 text-xs md:text-sm flex items-center gap-2">👨‍🏫 강사의 스텝별 풀이</h4>
-                                            <ul className="space-y-2.5 text-[11px] md:text-xs text-slate-300 leading-relaxed">
+                                            <h4 className="font-bold text-yellow-400 mb-3 text-xs md:text-sm flex items-center gap-2">👨‍🏫 1타 강사의 스텝별 풀이</h4>
+                                            <ul className="space-y-3 text-[11px] md:text-xs text-slate-300 leading-relaxed">
                                                 {currentPuzzle.solutionSteps.map((step, idx) => (
-                                                    <li key={idx} className="pb-2 border-b border-slate-700/50 last:border-0">{step}</li>
+                                                    <li key={idx} className="pb-2 border-b border-slate-700/50 last:border-0" dangerouslySetInnerHTML={{ __html: step }}></li>
                                                 ))}
                                             </ul>
                                             <button onClick={resetSudoku} className="mt-5 w-full py-2.5 bg-indigo-600 rounded-lg text-xs md:text-sm font-bold text-white hover:bg-indigo-500 transition-colors">
@@ -688,7 +800,7 @@
                                                 <td className="p-2 border-r border-slate-700 bg-slate-800 text-white font-black text-sm md:text-lg shadow-inner">{currentPuzzle.children.S}</td>
                                                 <td className="p-2 border-r border-slate-700 bg-slate-800 text-white font-black text-sm md:text-lg shadow-inner">{currentPuzzle.children.M}</td>
                                                 <td className="p-2 border-r-2 border-slate-800 bg-slate-800 text-white font-black text-sm md:text-lg shadow-inner">{currentPuzzle.children.L}</td>
-                                                <td className="p-2 bg-indigo-600 border-t-2 border-indigo-400 text-white font-black text-base md:text-xl shadow-lg">100</td>
+                                                <td className="p-2 bg-indigo-600 border-t-2 border-indigo-400 text-white font-black text-base md:text-xl shadow-lg">{currentPuzzle.totalChildren}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -701,7 +813,7 @@
         }
 
         // ==========================================
-        // 복지제도 3단 벤다이어그램 (슬라이더 UI 최적화)
+        // 복지제도 3단 벤다이어그램 (면적 기반 수학적 스케일 적용)
         // ==========================================
         function WelfareVennApp() {
             const [valA, setValA] = useState(60); 
@@ -712,10 +824,11 @@
             const [valCA, setValCA] = useState(8); 
             const [valABC, setValABC] = useState(2); 
 
-            // 동적 스케일 계산
+            // 단순 선형 스케일이 아닌 면적(Math.sqrt)에 비례하는 현실적 스케일링
+            // 값이 0일 때 화면에서 완전히 보이지 않도록 방지하는 최소값(0.2) 적용
             const getScale = (val) => {
-                const baseScale = 0.75;
-                return baseScale + (val / 100) * 0.55; 
+                if (val <= 0) return 0;
+                return Math.max(0.2, Math.sqrt(val / 100) * 1.3);
             };
 
             const scaleA = getScale(valA);
@@ -743,7 +856,7 @@
                             <span className="text-indigo-500">⭕</span> 복지 벤다이어그램 해석기
                         </h2>
                         <p className="text-slate-500 text-xs md:text-sm font-medium mb-6">
-                            슬라이더를 드래그하거나 숫자를 입력해 실시간 연동을 확인하세요.
+                            입력값에 따라 벤다이어그램 원의 <b className="text-indigo-600">면적이 수학적(루트 연산)으로 현실감 있게 연동</b>됩니다. 시각적 크기 변화를 관찰하세요.
                         </p>
 
                         <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
@@ -816,42 +929,44 @@
                                 </div>
                             </div>
 
-                            {/* 오른쪽: 벤다이어그램 시각화 */}
+                            {/* 오른쪽: 면적 비례 벤다이어그램 시각화 */}
                             <div className="w-full lg:w-[45%] flex flex-col items-center justify-center p-2 md:p-4 overflow-hidden">
-                                <div className="relative w-56 h-56 md:w-64 md:h-64 mt-4 md:mt-0 transform scale-90 md:scale-100">
+                                <div className="relative w-56 h-56 md:w-64 md:h-64 mt-4 md:mt-0 transform scale-90 md:scale-100 flex items-center justify-center">
                                     <div className="absolute inset-[-20px] border-2 border-dashed border-slate-300 rounded-xl bg-white shadow-sm -z-10 flex flex-col justify-between p-2">
                                         <span className="text-[10px] font-bold text-slate-400">전체 가구 (100%)</span>
                                         <span className="text-xs font-black text-rose-600 bg-rose-50 w-max px-2 rounded">사각지대(여집합): {blindSpot}%</span>
                                     </div>
 
-                                    {/* Circle A */}
-                                    <div className="absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-blue-300/50 border-2 border-blue-500 top-0 left-2 venn-circle flex flex-col items-center justify-start pt-3 md:pt-4" style={{transform: `scale(${scaleA})`, transformOrigin: 'center'}}>
-                                        <span className="text-[10px] font-bold text-blue-900 leading-none">순수 A</span>
-                                        <span className="font-black text-blue-950 text-sm leading-none mt-1">{onlyA}%</span>
-                                    </div>
+                                    <div className="relative w-full h-full flex items-center justify-center">
+                                        {/* Circle A */}
+                                        <div className={`absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-blue-300/50 border-2 border-blue-500 -top-4 -left-2 venn-circle flex flex-col items-center justify-start pt-3 md:pt-4 ${valA === 0 ? 'opacity-0' : 'opacity-100'}`} style={{transform: `scale(${scaleA})`}}>
+                                            <span className="text-[10px] font-bold text-blue-900 leading-none">순수 A</span>
+                                            <span className="font-black text-blue-950 text-sm leading-none mt-1">{onlyA}%</span>
+                                        </div>
 
-                                    {/* Circle B */}
-                                    <div className="absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-rose-300/50 border-2 border-rose-500 top-0 right-2 venn-circle flex flex-col items-center justify-start pt-3 md:pt-4" style={{transform: `scale(${scaleB})`, transformOrigin: 'center'}}>
-                                        <span className="text-[10px] font-bold text-rose-900 leading-none">순수 B</span>
-                                        <span className="font-black text-rose-950 text-sm leading-none mt-1">{onlyB}%</span>
-                                    </div>
+                                        {/* Circle B */}
+                                        <div className={`absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-rose-300/50 border-2 border-rose-500 -top-4 -right-2 venn-circle flex flex-col items-center justify-start pt-3 md:pt-4 ${valB === 0 ? 'opacity-0' : 'opacity-100'}`} style={{transform: `scale(${scaleB})`}}>
+                                            <span className="text-[10px] font-bold text-rose-900 leading-none">순수 B</span>
+                                            <span className="font-black text-rose-950 text-sm leading-none mt-1">{onlyB}%</span>
+                                        </div>
 
-                                    {/* Circle C */}
-                                    <div className="absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-emerald-300/50 border-2 border-emerald-500 bottom-0 left-12 md:left-14 venn-circle flex flex-col items-center justify-end pb-3 md:pb-4" style={{transform: `scale(${scaleC})`, transformOrigin: 'center'}}>
-                                        <span className="text-[10px] font-bold text-emerald-900 leading-none">순수 C</span>
-                                        <span className="font-black text-emerald-950 text-sm leading-none mt-1">{onlyC}%</span>
+                                        {/* Circle C */}
+                                        <div className={`absolute w-32 h-32 md:w-36 md:h-36 rounded-full bg-emerald-300/50 border-2 border-emerald-500 bottom-0 venn-circle flex flex-col items-center justify-end pb-3 md:pb-4 ${valC === 0 ? 'opacity-0' : 'opacity-100'}`} style={{transform: `scale(${scaleC})`}}>
+                                            <span className="text-[10px] font-bold text-emerald-900 leading-none">순수 C</span>
+                                            <span className="font-black text-emerald-950 text-sm leading-none mt-1">{onlyC}%</span>
+                                        </div>
                                     </div>
 
                                     {/* 교집합 값들 */}
-                                    <div className="absolute top-[45px] md:top-[50px] left-[95px] md:left-[110px] w-10 text-center z-10"><span className="text-[10px] md:text-[11px] font-black text-indigo-900 bg-white/70 px-1 rounded">{onlyAB}%</span></div>
+                                    <div className="absolute top-[40px] md:top-[50px] left-[95px] md:left-[110px] w-10 text-center z-10"><span className="text-[10px] md:text-[11px] font-black text-indigo-900 bg-white/70 px-1 rounded">{onlyAB}%</span></div>
                                     <div className="absolute bottom-[65px] md:bottom-[70px] left-[50px] md:left-[60px] w-10 text-center z-10"><span className="text-[10px] md:text-[11px] font-black text-teal-900 bg-white/70 px-1 rounded">{onlyCA}%</span></div>
                                     <div className="absolute bottom-[65px] md:bottom-[70px] right-[50px] md:right-[60px] w-10 text-center z-10"><span className="text-[10px] md:text-[11px] font-black text-orange-900 bg-white/70 px-1 rounded">{onlyBC}%</span></div>
-                                    <div className="absolute top-[95px] md:top-[100px] left-[95px] md:left-[110px] w-10 text-center z-20"><span className="text-xs md:text-sm font-black text-purple-900 bg-white/90 px-1 rounded-full shadow-sm">{valABC}%</span></div>
+                                    <div className="absolute top-[90px] md:top-[100px] left-[95px] md:left-[110px] w-10 text-center z-20"><span className="text-xs md:text-sm font-black text-purple-900 bg-white/90 px-1 rounded-full shadow-sm">{valABC}%</span></div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* 수능 단골 발문 번역기 대폭 확장 */}
+                        {/* 수능 단골 발문 번역기 */}
                         <div className="mt-8 bg-slate-800 p-5 md:p-6 rounded-2xl shadow-inner">
                             <h4 className="font-black text-yellow-400 mb-4 text-base md:text-lg flex items-center gap-2">
                                 👨‍🏫 수능 단골 발문 완벽 번역기
@@ -905,7 +1020,7 @@
         }
 
         // ==========================================
-        // 탭 5: 가중평균 시소 시뮬레이터 (반응형 최적화)
+        // 탭 5: 가중평균 시소 시뮬레이터 
         // ==========================================
         function SeesawApp() {
             const [sliderA, setSliderA] = useState(15);
@@ -1004,7 +1119,7 @@
                                 <input 
                                     type="range" min={sliderA + 1} max={sliderB - 1} value={sliderTotal} 
                                     onChange={(e) => setSliderTotal(Number(e.target.value))}
-                                    className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer mt-2"
+                                    className="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer mt-2 text-slate-600"
                                 />
                             </div>
                         </div>
@@ -1027,21 +1142,23 @@
                                     </div>
                                 </div>
                                 
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-indigo-900/40 p-3 rounded-xl border border-indigo-700/50 gap-2">
-                                    <div className="flex items-center gap-2 text-indigo-200 text-xs md:text-sm font-bold">
-                                        <span className="text-base md:text-lg">👥</span> <span className="underline decoration-indigo-400">인구 수</span>의 비 (A : B)
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-indigo-900/40 p-3 rounded-xl border border-indigo-700/50 gap-2 relative overflow-hidden">
+                                    <div className="absolute right-0 top-0 text-7xl opacity-5">👥</div>
+                                    <div className="flex items-center gap-2 text-indigo-200 text-xs md:text-sm font-bold z-10">
+                                        <span className="text-base md:text-lg">⚖️</span> <span className="underline decoration-indigo-400">인구 수</span>의 비 (A : B)
                                     </div>
-                                    <div className="font-black text-white text-base md:text-lg text-right w-full sm:w-auto">
+                                    <div className="font-black text-white text-base md:text-lg text-right w-full sm:w-auto z-10">
                                         <span className="text-blue-400">{distB}</span> : <span className="text-rose-400">{distA}</span><br/>
-                                        <span className="text-[9px] md:text-[10px] text-slate-400 font-normal bg-slate-800 px-2 py-0.5 rounded-full inline-block mt-1">거리비의 역수</span>
+                                        <span className="text-[9px] md:text-[10px] text-yellow-300 font-bold bg-slate-800 px-2 py-0.5 rounded-full inline-block mt-1">🔥 1등급 핵심: 거리비의 역수</span>
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-emerald-900/30 p-3 md:p-4 rounded-xl border border-emerald-700/50 gap-2">
-                                    <div className="flex items-center gap-2 text-emerald-200 text-xs md:text-sm font-bold">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-emerald-900/30 p-3 md:p-4 rounded-xl border border-emerald-700/50 gap-2 relative overflow-hidden">
+                                    <div className="absolute right-0 top-0 text-7xl opacity-5">💰</div>
+                                    <div className="flex items-center gap-2 text-emerald-200 text-xs md:text-sm font-bold z-10">
                                         <span className="text-lg md:text-xl">💰</span> 실제 <span className="text-white bg-emerald-600 px-1.5 rounded mx-1">수급자 수</span>의 비 (A : B)
                                     </div>
-                                    <div className="text-right w-full sm:w-auto">
+                                    <div className="text-right w-full sm:w-auto z-10">
                                         <div className="font-black text-white text-lg md:text-xl">
                                             <span className="text-blue-400">{recRatioA}</span> : <span className="text-rose-400">{recRatioB}</span>
                                         </div>
