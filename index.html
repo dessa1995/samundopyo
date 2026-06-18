@@ -191,52 +191,38 @@
                                 </p>
                             </div>
 
-                            <FeedCard title="인구 부양비와 노령화 지수 함정" tag="빈출 1위: 인구 구조" icon="👨‍👩‍👧‍👦" likes="28.9k">
+                            {/* 1. 산수 실수 방지 위원회 (비례배분/퍼센트) */}
+                            <FeedCard title="비례배분 & 퍼센트 계산 3초 컷 비법" tag="산수 실수 방지 위원회" icon="🧮" likes="54.2k">
                                 <p className="text-slate-600 font-medium mb-4 text-sm leading-relaxed">
-                                    "유소년 인구가 20% 감소하면 유소년 부양비도 20% 감소한다?" 절대 아닙니다! 분모인 '부양 인구'가 변했는지 확인해야 합니다.
+                                    "풀이법은 아는데 산수에서 틀렸어요..." 도표 문제에서 가장 억울한 상황을 방지하기 위한 절대 규칙입니다.
                                 </p>
                                 <LevelLearner levels={[
                                     {
-                                        title: "Lv.1 기준(분모) 잡기",
+                                        title: "Lv.1 비례배분 (예: 1:3:6)",
                                         content: (
-                                            <div className="animate-fade-in text-slate-700 text-sm">
-                                                <p className="mb-3 font-bold text-rose-600">🚨 부양비의 분모는 '전체 인구'가 아닙니다!</p>
-                                                <ul className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                                                    <li>• 유소년 부양비 = <Fraction num="유소년 인구" den={<span className="text-blue-600 font-bold">부양 인구(15~64)</span>} /> × 100</li>
-                                                    <li>• 노년 부양비 = <Fraction num="노년 인구" den={<span className="text-blue-600 font-bold">부양 인구(15~64)</span>} /> × 100</li>
-                                                    <li>• 총부양비 = 유소년 부양비 + 노년 부양비</li>
-                                                    <li className="pt-2 border-t font-bold text-indigo-700 mt-2">
-                                                        • 노령화 지수 = <Fraction num="노년 인구" den={<span className="text-emerald-600 font-bold">유소년 인구</span>} /> × 100
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        )
-                                    },
-                                    {
-                                        title: "Lv.2 기출 함정 파훼",
-                                        content: (
-                                            <div className="animate-fade-in text-slate-700 text-sm">
-                                                <p className="font-bold text-slate-800 mb-2">Q. 총부양비가 100이면?</p>
-                                                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 font-bold text-indigo-700 leading-relaxed">
-                                                    식: <Fraction num="(유소년+노년)" den="부양 인구" /> × 100 = 100 <br/><br/>
-                                                    즉, <b>(유소년+노년) = 부양 인구</b> 라는 뜻입니다.<br/>
-                                                    이는 <b>전체 인구에서 부양 인구가 차지하는 비율이 정확히 50%</b>라는 엄청난 힌트가 됩니다!
+                                            <div className="animate-fade-in text-slate-700 text-sm leading-relaxed">
+                                                <p className="mb-2 font-bold">전체 인구수가 100명이고, 상:중:하 계층 비율이 <span className="text-indigo-600">1:3:6</span>이라면?</p>
+                                                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 font-bold text-indigo-800">
+                                                    <p className="mb-3">1. 다 더해서 '분모'를 만듭니다: 1 + 3 + 6 = <span className="text-rose-600">10</span></p>
+                                                    <p className="mb-1 flex items-center gap-2">2. 상층: 100 × <Fraction num="1" den="10" /> = <span className="text-indigo-600">10명</span></p>
+                                                    <p className="mb-1 flex items-center gap-2">3. 중층: 100 × <Fraction num="3" den="10" /> = <span className="text-indigo-600">30명</span></p>
+                                                    <p className="flex items-center gap-2">4. 하층: 100 × <Fraction num="6" den="10" /> = <span className="text-indigo-600">60명</span></p>
                                                 </div>
                                             </div>
                                         )
                                     },
                                     {
-                                        title: "Lv.3 역추산 꿀팁 (비례식)",
+                                        title: "Lv.2 퍼센트 계산 (예: 300의 27%)",
                                         content: (
-                                            <div className="animate-fade-in text-slate-700 text-sm">
-                                                <p className="font-bold text-indigo-700 mb-2">💡 분수 비례식으로 전체 인구수 맞추기</p>
-                                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm leading-relaxed">
-                                                    <p>노령화 지수가 50이면? 👉 노년 : 유소년 = 50 : 100 = <b className="text-rose-500">1 : 2</b></p>
-                                                    <p>노년 부양비가 20이면? 👉 노년 : 부양인구 = 20 : 100 = <b className="text-blue-500">1 : 5</b></p>
-                                                    <div className="my-2 border-t border-dashed border-slate-300"></div>
-                                                    <p>이 두 비례식의 교집합인 '노년(1)'을 연결하면?<br/>
-                                                    <b>유소년 : 부양인구 : 노년 = <span className="text-emerald-600 font-black text-lg">2 : 5 : 1</span></b> 이 됩니다!</p>
-                                                    <p className="mt-2 text-xs text-slate-500">이제 인구를 20a, 50a, 10a로 세팅하면 모든 문제가 다 풀립니다.</p>
+                                            <div className="animate-fade-in text-slate-700 text-sm leading-relaxed">
+                                                <p className="mb-2 font-bold">전체 300명 중에서 27%를 구해야 한다면?</p>
+                                                <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100 font-bold text-emerald-900">
+                                                    <p className="mb-3 flex items-center gap-2 text-slate-500 line-through">정석: 300 × <Fraction num="27" den="100" /></p>
+                                                    <p className="text-rose-600 text-base mb-2">🔥 1타 꿀팁: "0 두 개 떼고 곱해라!"</p>
+                                                    <p className="bg-white p-3 rounded-lg border border-emerald-200">
+                                                        300에서 0 두 개를 떼면 👉 3 <br/> 
+                                                        <b>3 × 27 = <span className="text-emerald-600 text-lg">81명</span></b>
+                                                    </p>
                                                 </div>
                                             </div>
                                         )
@@ -244,7 +230,8 @@
                                 ]} />
                             </FeedCard>
 
-                            <FeedCard title="A에 대한 B의 비율" tag="수학적 사고 기초" icon="🧮" likes="18.5k">
+                            {/* 2. A에 대한 B의 비율 */}
+                            <FeedCard title="A에 대한 B의 비율" tag="수학적 사고 기초" icon="📐" likes="18.5k">
                                 <p className="text-slate-600 font-medium mb-4 text-sm leading-relaxed">
                                     가장 기초적이면서 가장 많이 틀리는 수능 1번 함정입니다. 분모/분자 위치를 헷갈리면 끝장입니다.
                                 </p>
@@ -285,6 +272,7 @@
                                 ]} />
                             </FeedCard>
 
+                            {/* 3. 분수 꼴 타파 */}
                             <FeedCard title="분수 꼴로 제시된 비율 비(比) 타파하기" tag="고난도 발문 팁" icon="➗" likes="15.2k">
                                 <p className="text-slate-600 font-medium mb-4 text-sm leading-relaxed">
                                     [질문 폭주!] "분수 형태로 나오면 어떻게 시작하죠?" <br/>
@@ -341,6 +329,174 @@
                                                             👉 이제 a와 b의 관계(예: "을국 총인구가 갑국의 2배이다" → b=2a)만 알면 정확한 명수를 비교할 수 있습니다!
                                                         </li>
                                                     </ul>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                ]} />
+                            </FeedCard>
+
+                            {/* 4. 계층 이동표 영역 해독 */}
+                            <FeedCard title="계층 이동표(스도쿠) 영역별 완벽 해독" tag="핵심 개념: 계층 이동" icon="🗺️" likes="32.1k">
+                                <p className="text-slate-600 font-medium mb-4 text-sm leading-relaxed">
+                                    "우상단 3칸이 하강 이동이었나?" 헷갈린다면 주목! 표의 각 영역이 의미하는 바와 평가원의 악랄한 축 반전 함정 패턴을 완벽하게 정리해 드립니다.
+                                </p>
+                                <LevelLearner levels={[
+                                    {
+                                        title: "Lv.1 대각선 = 대물림",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm">
+                                                <p className="mb-3">표의 <b>정중앙을 가로지르는 대각선 3칸</b>은 언제나 <b>세대 간 계층 유지(대물림)</b>를 의미합니다.</p>
+                                                <div className="flex justify-center mb-3">
+                                                    <table className="text-xs bg-white border border-slate-300 text-center w-full max-w-[200px]">
+                                                        <tbody>
+                                                            <tr><td className="p-2 border border-slate-200 bg-emerald-100 font-bold">상→상</td><td className="p-2 border border-slate-200 text-slate-300 bg-slate-50">상→중</td><td className="p-2 border border-slate-200 text-slate-300 bg-slate-50">상→하</td></tr>
+                                                            <tr><td className="p-2 border border-slate-200 text-slate-300 bg-slate-50">중→상</td><td className="p-2 border border-slate-200 bg-emerald-100 font-bold">중→중</td><td className="p-2 border border-slate-200 text-slate-300 bg-slate-50">중→하</td></tr>
+                                                            <tr><td className="p-2 border border-slate-200 text-slate-300 bg-slate-50">하→상</td><td className="p-2 border border-slate-200 text-slate-300 bg-slate-50">하→중</td><td className="p-2 border border-slate-200 bg-emerald-100 font-bold">하→하</td></tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <p className="text-xs text-slate-500 text-center">대각선 3칸 외의 나머지 영역은 모두 '이동'을 나타냅니다.</p>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        title: "Lv.2 상승 vs 하강 이동",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm">
+                                                <p className="mb-3"><b>행(가로)이 부모, 열(세로)이 자녀</b>일 때의 기본 형태입니다.</p>
+                                                <ul className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                                    <li className="flex items-start gap-2">
+                                                        <span className="w-4 h-4 mt-0.5 bg-blue-200 inline-block rounded border border-blue-400 flex-shrink-0"></span> 
+                                                        <div>
+                                                            <b className="text-blue-800">우상단 3칸 (하강 이동):</b>
+                                                            <p className="text-xs text-slate-500 mt-1">부모 상→자녀 중/하, 부모 중→자녀 하</p>
+                                                        </div>
+                                                    </li>
+                                                    <li className="flex items-start gap-2">
+                                                        <span className="w-4 h-4 mt-0.5 bg-rose-200 inline-block rounded border border-rose-400 flex-shrink-0"></span> 
+                                                        <div>
+                                                            <b className="text-rose-800">좌하단 3칸 (상승 이동):</b>
+                                                            <p className="text-xs text-slate-500 mt-1">부모 하→자녀 중/상, 부모 중→자녀 상</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        title: "Lv.3 🚨 축 반전 함정",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm">
+                                                <div className="bg-rose-50 p-4 rounded-xl border border-rose-200">
+                                                    <p className="font-bold text-rose-600 mb-2">🔥 행과 열이 바뀌면 의미도 완전히 뒤집힙니다!</p>
+                                                    <p className="leading-relaxed mb-3 text-slate-700 font-medium">
+                                                        만약 문제에서 <b>행(가로)을 자녀, 열(세로)을 부모</b>로 바꿔서 표를 제시한다면?<br/>
+                                                        👉 우상단 3칸이 <b className="text-rose-600">상승 이동</b>, 좌하단 3칸이 <b className="text-blue-600">하강 이동</b>으로 180도 바뀝니다.
+                                                    </p>
+                                                    <p className="font-black text-rose-900 bg-white px-3 py-2 block rounded-lg text-xs shadow-sm text-center border border-rose-100">
+                                                        [행동 강령]<br/>표를 보면 무조건 '누가 가로고 누가 세로인지' 축부터 확인하라!
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                ]} />
+                            </FeedCard>
+
+                            {/* 5. 인구 구조 */}
+                            <FeedCard title="인구 부양비와 노령화 지수 함정" tag="빈출 1위: 인구 구조" icon="👨‍👩‍👧‍👦" likes="28.9k">
+                                <p className="text-slate-600 font-medium mb-4 text-sm leading-relaxed">
+                                    "유소년 인구가 20% 감소하면 유소년 부양비도 20% 감소한다?" 절대 아닙니다! 분모인 '부양 인구'가 변했는지 확인해야 합니다.
+                                </p>
+                                <LevelLearner levels={[
+                                    {
+                                        title: "Lv.1 기준(분모) 잡기",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm">
+                                                <p className="mb-3 font-bold text-rose-600">🚨 부양비의 분모는 '전체 인구'가 아닙니다!</p>
+                                                <ul className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                                    <li>• 유소년 부양비 = <Fraction num="유소년 인구" den={<span className="text-blue-600 font-bold">부양 인구(15~64)</span>} /> × 100</li>
+                                                    <li>• 노년 부양비 = <Fraction num="노년 인구" den={<span className="text-blue-600 font-bold">부양 인구(15~64)</span>} /> × 100</li>
+                                                    <li>• 총부양비 = 유소년 부양비 + 노년 부양비</li>
+                                                    <li className="pt-2 border-t font-bold text-indigo-700 mt-2">
+                                                        • 노령화 지수 = <Fraction num="노년 인구" den={<span className="text-emerald-600 font-bold">유소년 인구</span>} /> × 100
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        title: "Lv.2 기출 함정 파훼",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm">
+                                                <p className="font-bold text-slate-800 mb-2">Q. 총부양비가 100이면?</p>
+                                                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 font-bold text-indigo-700 leading-relaxed">
+                                                    식: <Fraction num="(유소년+노년)" den="부양 인구" /> × 100 = 100 <br/><br/>
+                                                    즉, <b>(유소년+노년) = 부양 인구</b> 라는 뜻입니다.<br/>
+                                                    이는 <b>전체 인구에서 부양 인구가 차지하는 비율이 정확히 50%</b>라는 엄청난 힌트가 됩니다!
+                                                </div>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        title: "Lv.3 역추산 꿀팁 (비례식)",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm">
+                                                <p className="font-bold text-indigo-700 mb-2">💡 분수 비례식으로 전체 인구수 맞추기</p>
+                                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm leading-relaxed">
+                                                    <p>노령화 지수가 50이면? 👉 노년 : 유소년 = 50 : 100 = <b className="text-rose-500">1 : 2</b></p>
+                                                    <p>노년 부양비가 20이면? 👉 노년 : 부양인구 = 20 : 100 = <b className="text-blue-500">1 : 5</b></p>
+                                                    <div className="my-2 border-t border-dashed border-slate-300"></div>
+                                                    <p>이 두 비례식의 교집합인 '노년(1)'을 연결하면?<br/>
+                                                    <b>유소년 : 부양인구 : 노년 = <span className="text-emerald-600 font-black text-lg">2 : 5 : 1</span></b> 이 됩니다!</p>
+                                                    <p className="mt-2 text-xs text-slate-500">이제 인구를 20a, 50a, 10a로 세팅하면 모든 문제가 다 풀립니다.</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                ]} />
+                            </FeedCard>
+
+                            {/* 6. 사회 불평등 (빈곤/임금격차) */}
+                            <FeedCard title="사회 불평등 파트 핵심: 빈곤율 & 임금 격차" tag="오답률 1위: 사회 불평등" icon="⚖️" likes="39.8k">
+                                <p className="text-slate-600 font-medium mb-4 text-sm leading-relaxed">
+                                    "빈곤 가구가 겹친다구요?" "임금 격차가 30%면 누가 얼마인 거지?" <br/>
+                                    수능에 매년 출제되는 사회 불평등 단원의 양대 산맥을 벤다이어그램과 미지수로 완벽 해부합니다.
+                                </p>
+                                <LevelLearner levels={[
+                                    {
+                                        title: "Lv.1 빈곤 가구 포함 관계",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm leading-relaxed">
+                                                <p className="font-bold text-rose-600 mb-2">🚨 절대적 빈곤율 vs 상대적 빈곤율</p>
+                                                <ul className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                                                    <li>
+                                                        👉 <b>상대적 빈곤율 &gt; 절대적 빈곤율</b>인 경우:<br/>
+                                                        (중위소득 50%의 금액 &gt; 최저 생계비) 이므로, <br/>
+                                                        <b className="text-blue-600">모든 절대적 빈곤 가구는 상대적 빈곤 가구에 100% 포함</b>됩니다.
+                                                    </li>
+                                                    <li className="pt-2 border-t border-slate-300">
+                                                        👉 <b>상대적 빈곤 가구이면서 절대적 빈곤 가구가 아닌 비율</b><br/>
+                                                        = (상대적 빈곤율) - (절대적 빈곤율)
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )
+                                    },
+                                    {
+                                        title: "Lv.2 성별 임금 격차 번역기",
+                                        content: (
+                                            <div className="animate-fade-in text-slate-700 text-sm leading-relaxed">
+                                                <p className="font-bold text-slate-800 mb-2">Q. "성별 임금 격차는 30%이다."</p>
+                                                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 font-bold text-indigo-800">
+                                                    <p className="mb-2 text-xs text-slate-500 flex items-center gap-2">
+                                                        공식: <Fraction num="남성 임금 - 여성 임금" den="남성 임금" /> × 100
+                                                    </p>
+                                                    <p>이 말은 즉, <b>여성 임금이 남성 임금의 70%</b>라는 뜻입니다!</p>
+                                                    <p className="mt-2 text-rose-500 bg-white p-2 rounded border border-indigo-100">
+                                                        🔥 실전 풀이법: 남성을 <b>100a</b>로 두면, 여성을 <b>70a</b>로 바로 미지수 세팅!
+                                                    </p>
                                                 </div>
                                             </div>
                                         )
@@ -414,7 +570,7 @@
                                         </ul>
                                     </div>
                                     
-                                    {/* 새롭게 추가된 최고난도 발문 번역기 */}
+                                    {/* 최고난도 발문 번역기 */}
                                     <div className="bg-slate-800 rounded-2xl p-5 md:p-6 shadow-xl border border-slate-700 relative overflow-hidden">
                                         <div className="absolute top-0 right-0 opacity-10 text-7xl -translate-y-2 translate-x-4 mix-blend-overlay">💡</div>
                                         <div className="flex items-center gap-3 mb-6">
@@ -766,7 +922,7 @@
                             <h2 className="text-xl md:text-2xl font-black text-slate-800">계층 스도쿠 훈련장</h2>
                             <span className="bg-rose-600 text-white text-[10px] md:text-xs font-black px-2 md:px-3 py-1 rounded-full animate-pulse-soft whitespace-nowrap">킬러 문항 대규모 업데이트</span>
                         </div>
-                        <p className="text-slate-500 text-xs md:text-sm font-medium mb-6">수능 3점짜리 기출을 반영하여 <b className="text-rose-500">인구 비율과 절댓값(명)을 엄격히 구분</b>해야 풀리는 총 8단계 난이도가 적용되었습니다.</p>
+                        <p className="text-slate-500 text-xs md:text-sm font-medium mb-6">수능 3점짜 기출을 반영하여 <b className="text-rose-500">인구 비율과 절댓값(명)을 엄격히 구분</b>해야 풀리는 총 8단계 난이도가 적용되었습니다.</p>
 
                         <div className="flex gap-2 mb-6 bg-slate-100 p-1.5 rounded-2xl w-full overflow-x-auto scrollbar-hide">
                             {levelsArray.map(lvl => (
